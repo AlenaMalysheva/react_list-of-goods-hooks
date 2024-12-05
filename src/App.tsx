@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import './App.scss';
+import { GoodList } from './components/GoodList';
+import { Buttons } from './components/Buttons';
 
 export const goodsFromServer = [
   'Dumplings',
@@ -16,35 +18,55 @@ export const goodsFromServer = [
 ];
 
 export const App: React.FC = () => {
+  const [vissibleGoods, setVisibleGoods] = useState<string[]>(goodsFromServer);
+  const [sortGoods, setSortGoods] = useState<string>('');
+  const [isReversed, setIsReversed] = useState<boolean>(false);
+
+  const sortedGoods = (field: string) => {
+    const updatedGoods = [...goodsFromServer];
+
+    if (field) {
+      switch (field) {
+        case 'alphabet':
+          updatedGoods.sort((item1, item2) => item1.localeCompare(item2));
+          break;
+        case 'length':
+          updatedGoods.sort((item1, item2) => item1.length - item2.length);
+          break;
+        default:
+          break;
+      }
+    }
+
+    setVisibleGoods(updatedGoods);
+    setSortGoods(field);
+    setIsReversed(false);
+  };
+
+  const reverseItems = () => {
+    const reversed = [...vissibleGoods].reverse();
+
+    setVisibleGoods(reversed);
+    setIsReversed(!isReversed);
+  };
+
+  const reset = () => {
+    setVisibleGoods([...goodsFromServer]);
+    setSortGoods('');
+    setIsReversed(false);
+  };
+
   return (
     <div className="section content">
-      <div className="buttons">
-        <button type="button" className="button is-info is-light">
-          Sort alphabetically
-        </button>
-
-        <button type="button" className="button is-success is-light">
-          Sort by length
-        </button>
-
-        <button type="button" className="button is-warning is-light">
-          Reverse
-        </button>
-
-        <button type="button" className="button is-danger is-light">
-          Reset
-        </button>
-      </div>
-
+      <Buttons
+        sortBy={sortedGoods}
+        reset={reset}
+        sortField={sortGoods}
+        reverse={isReversed}
+        setReverse={reverseItems}
+      />
       <ul>
-        <ul>
-          <li data-cy="Good">Dumplings</li>
-          <li data-cy="Good">Carrot</li>
-          <li data-cy="Good">Eggs</li>
-          <li data-cy="Good">Ice cream</li>
-          <li data-cy="Good">Apple</li>
-          <li data-cy="Good">...</li>
-        </ul>
+        <GoodList goods={vissibleGoods} />
       </ul>
     </div>
   );
