@@ -1,11 +1,13 @@
 import React from 'react';
 import cn from 'classnames';
 
+import { SortType } from '../App';
+
 type Props = {
   sortBy: (value: string) => void;
   setReverse: () => void;
   reset: () => void;
-  sortField: string;
+  sortField: SortType;
   reverse: boolean;
 };
 
@@ -21,9 +23,9 @@ export const Buttons: React.FC<Props> = ({
       <button
         type="button"
         className={cn('button', 'is-info', {
-          'is-light': sortField !== 'alphabet',
+          'is-light': sortField !== SortType.ALPHABET,
         })}
-        onClick={() => sortBy('alphabet')}
+        onClick={() => sortBy(SortType.ALPHABET)}
       >
         Sort alphabetically
       </button>
@@ -31,9 +33,9 @@ export const Buttons: React.FC<Props> = ({
       <button
         type="button"
         className={cn('button', 'is-success', {
-          'is-light': sortField !== 'length',
+          'is-light': sortField !== SortType.LENGTH,
         })}
-        onClick={() => sortBy('length')}
+        onClick={() => sortBy(SortType.LENGTH)}
       >
         Sort by length
       </button>

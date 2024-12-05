@@ -17,20 +17,26 @@ export const goodsFromServer = [
   'Garlic',
 ];
 
+export enum SortType {
+  NONE = 'none',
+  ALPHABET = 'alphabet',
+  LENGTH = 'length',
+}
+
 export const App: React.FC = () => {
   const [vissibleGoods, setVisibleGoods] = useState<string[]>(goodsFromServer);
-  const [sortGoods, setSortGoods] = useState<string>('');
+  const [sortGoods, setSortGoods] = useState<string>(SortType.NONE);
   const [isReversed, setIsReversed] = useState<boolean>(false);
 
   const sortedGoods = (field: string) => {
     const updatedGoods = [...goodsFromServer];
 
-    if (field) {
+    if (field !== SortType.NONE) {
       switch (field) {
-        case 'alphabet':
+        case SortType.ALPHABET:
           updatedGoods.sort((item1, item2) => item1.localeCompare(item2));
           break;
-        case 'length':
+        case SortType.LENGTH:
           updatedGoods.sort((item1, item2) => item1.length - item2.length);
           break;
         default:
@@ -52,7 +58,7 @@ export const App: React.FC = () => {
 
   const reset = () => {
     setVisibleGoods([...goodsFromServer]);
-    setSortGoods('');
+    setSortGoods(SortType.NONE);
     setIsReversed(false);
   };
 
