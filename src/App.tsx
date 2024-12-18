@@ -25,10 +25,10 @@ export enum SortType {
 
 export const App: React.FC = () => {
   const [vissibleGoods, setVisibleGoods] = useState<string[]>(goodsFromServer);
-  const [sortGoods, setSortGoods] = useState<string>(SortType.NONE);
+  const [sortGoods, setSortGoods] = useState<SortType>(SortType.NONE);
   const [isReversed, setIsReversed] = useState<boolean>(false);
 
-  const sortedGoods = (field: string) => {
+  const sortedGoods = (field: SortType) => {
     const updatedGoods = [...goodsFromServer];
 
     if (field !== SortType.NONE) {
@@ -44,16 +44,19 @@ export const App: React.FC = () => {
       }
     }
 
+    if (isReversed) {
+      updatedGoods.reverse();
+    }
+
     setVisibleGoods(updatedGoods);
     setSortGoods(field);
-    setIsReversed(false);
   };
 
   const reverseItems = () => {
-    const reversed = [...vissibleGoods].reverse();
+    const reversedGoods = [...vissibleGoods].reverse();
 
-    setVisibleGoods(reversed);
-    setIsReversed(!isReversed);
+    setVisibleGoods(reversedGoods);
+    setIsReversed(prevReverse => !prevReverse);
   };
 
   const reset = () => {

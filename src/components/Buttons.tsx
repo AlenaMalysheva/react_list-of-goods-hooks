@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { SortType } from '../App';
 
 type Props = {
-  sortBy: (value: string) => void;
+  sortBy: (value: SortType) => void;
   setReverse: () => void;
   reset: () => void;
   sortField: SortType;
@@ -18,6 +18,8 @@ export const Buttons: React.FC<Props> = ({
   reverse,
   setReverse,
 }) => {
+  const isResetVisible = reverse || sortField !== SortType.NONE;
+
   return (
     <div className="buttons">
       <button
@@ -49,7 +51,7 @@ export const Buttons: React.FC<Props> = ({
       >
         Reverse
       </button>
-      {(sortField || reverse) && (
+      {isResetVisible && (
         <button
           type="button"
           className="button is-danger is-light"
